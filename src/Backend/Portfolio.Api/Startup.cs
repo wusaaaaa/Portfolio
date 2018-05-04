@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Portfolio.Api.AppSettings;
+using Portfolio.Api.Database;
+using Portfolio.Api.Services;
 
 namespace Portfolio.Api
 {
@@ -22,6 +25,12 @@ namespace Portfolio.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DatabaseSettings>(this.Configuration.GetSection("Database"));
+            services.Configure<AccountSettings>(this.Configuration.GetSection("Account"));
+
+            services.AddSingleton<IDbConnectionFactory, SqlDbConnectionFactory>();
+            services.AddSingleton<IJwtService, JwtService>();
+
             services.AddMvc();
         }
 
